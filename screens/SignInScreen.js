@@ -40,7 +40,7 @@ function SignInScreen({ navigation }) {
         autoCapitalize='none'
         onChangeText={(text) => setPassword(text)}
       />
-      <Button title="Se connecter" onPress={signIn} color="#FFA500" />
+      <Button title="Se connecter" onPress={() => navigation.navigate('home')} color="#FFA500" />
        
       <Button title="Pas encore de compte ? Inscription" onPress={() => navigation.navigate('SignUp')} color="#FFA500"/>
     </View>

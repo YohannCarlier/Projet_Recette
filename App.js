@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from './screens/SplashScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import HomeScreen from './screens/home';
 // import firebase from '@react-native-firebase/app';
 // import auth from '@react-native-firebase/auth';
 
@@ -30,6 +31,11 @@ const App = () => {
           name="SignUp"
           component={SignUpScreen}
           options={{ title: 'Inscription' }}
+        />
+        <Stack.Screen
+          name="home"
+          component={HomeScreen}
+          options={{ title: 'home' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
