@@ -6,9 +6,17 @@ import { FIREBASE_APP } from '../firebase';
 function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [confirm_password, setConfirmPassword] = useState('');
+  const [error, setError] = useState(null);
 
   const signUp = async () => {
     const auth = getAuth(FIREBASE_APP);
+
+    if (password !== confirm_password) {
+      setError("Les mots de passe ne correspondent pas");
+      return;
+    }
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -24,6 +32,13 @@ function SignUpScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.logoText}>Page d'Inscription</Text>
       <TextInput
+        value={name}
+        style={styles.input}
+        placeholder='Nom'
+        autoCapitalize='none'
+        onChangeText={(text) => setName(text)}
+      />
+      <TextInput
         value={email}
         style={styles.input}
         placeholder='Adresse email'
@@ -38,8 +53,17 @@ function SignUpScreen({ navigation }) {
         autoCapitalize='none'
         onChangeText={(text) => setPassword(text)}
       />
-      <Button title="S'inscrire" onPress={signUp} color="#FFA500"/>
+      <TextInput
+        secureTextEntry={true}
+        value={confirm_password}
+        style={styles.input}
+        placeholder='Confirmer votre mot de passe'
+        autoCapitalize='none'
+        onChangeText={(text) => setConfirmPassword(text)}
+      />
+      <Button title="S'inscrire" onPress={signUp} color="#FFA500"/><br></br>
       <Button title="Déjà un compte ? Connexion" onPress={() => navigation.navigate('SignIn')} color="#FFA500"/>
+      {error && <Text style={{ color: 'red' }}>{error}</Text>}
     </View>
   );
 }
