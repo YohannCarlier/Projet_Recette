@@ -7,34 +7,43 @@ const SplashScreen = ({ navigation }) => { // Ajoutez navigation aux props
     <View style={styles.container}>
       <Image source={require('../assets/splash-image.png')} style={styles.backgroundImage} />
       <View style={styles.logoContainer}>
-        <Text style={styles.logoText}>ChefConnect</Text>
-        <Text style={styles.tagline}>Le chef, c'est vous !</Text>
+      <View style={styles.logoTextContainer}>
+      <Text style={styles.orangeText}>Chef</Text>
+      <Text style={styles.logoText}>Connect</Text>
+      </View>
+      <View style={styles.taglineContainer}>
+          <Text style={styles.tagline}>Le chef, c'est vous !</Text><br></br>
+        </View>
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('SignIn')} // Ajoutez cette ligne pour naviguer vers Sign In
+        onPress={() => navigation.navigate('SignIn')}
       >
         <Text style={styles.buttonText}>Se Connecter</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate('SignUp')} // Ajoutez cette ligne pour naviguer vers Sign Up
+        onPress={() => navigation.navigate('SignUp')}
       >
-        <Text style={styles.signupText} >Pas de compte ? Inscris toi !</Text>
+        <View style={styles.signupText}>
+      <View style={styles.logoTextContainer}>
+      <Text style={styles.pdc}>Pas de compte ?</Text>
+      <Text style={styles.signup}> Inscris toi !</Text>
+      </View>
+</View>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    // ... vos styles existants
     signupText: {
-        color: 'blue',
+        color: 'orange',
         marginTop: 20,
     },
     container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     backgroundImage: {
         position: 'absolute',
@@ -42,16 +51,39 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     logoContainer: {
-        marginBottom: 100,
+      alignItems: 'center',
+    },
+    logoTextContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    orangeText: {
+      color: 'orange',
+      fontSize: 40,
+      fontWeight: 'bold',
+    },
+    pdc: {
+      color:"white",
+      fontSize:"24",
+    },
+    signup: {
+      color:"orange"
     },
     logoText: {
         fontSize: 40,
         fontWeight: 'bold',
         color: 'white',
     },
+    taglineContainer: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      marginTop: 10,
+    },
     tagline: {
-        fontSize: 20,
-        color: 'white',
+      color:"orange",
+      textAlign: 'center',
+      fontSize: 18,
+      marginTop: 10,
     },
     button: {
         backgroundColor: 'orange',
@@ -63,9 +95,6 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontSize: 18,
-    },
-    signupText: {
-        color: 'blue',
     },
     
 });

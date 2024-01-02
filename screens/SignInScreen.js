@@ -7,6 +7,7 @@ import { FIREBASE_APP } from '../firebase';
 function SignInScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null); // Nouveau state pour stocker les erreurs
 
   const signIn = async () => {
     const auth = getAuth(FIREBASE_APP);
@@ -18,7 +19,7 @@ function SignInScreen({ navigation }) {
       navigation.navigate('Main');
     } catch (error) {
       console.error(error);
-      alert('Erreur de connexion : ' + error.message);
+      setError("Adresse mail ou mot de passe invalide, veuillez réessayer");
     }
   }
 
@@ -44,6 +45,8 @@ function SignInScreen({ navigation }) {
 
        
       <Button title="Pas encore de compte ? Inscription" onPress={() => navigation.navigate('SignUp')} color="#FFA500"/>
+      
+      {error && <Text style={{ color: 'red' }}>{error}</Text>} {/* Afficher l'erreur s'il y en a une */}
     </View>
   );
 }
