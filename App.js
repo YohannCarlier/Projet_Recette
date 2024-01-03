@@ -38,8 +38,15 @@ const App = () => {
           component={BottomTabNavigator}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="RecipeList" component={RecipeListScreen} />
-        <Stack.Screen name="RecipeDetail" component={RecipeDetail} options={{ title: 'Detail recette' }}/>
+        <Stack.Screen 
+        name="RecipeList" 
+        component={RecipeListScreen} 
+        />
+        <Stack.Screen 
+        name="RecipeDetail" 
+        component={RecipeDetail} 
+        options={{ title: 'Detail recette' }}
+        />
 
       </Stack.Navigator>
     </NavigationContainer>

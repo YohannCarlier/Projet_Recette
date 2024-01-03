@@ -22,8 +22,8 @@ const BottomTabNavigator = () => {
             iconName = focused ? 'ios-heart' : 'ios-heart-outline';
           } else if (route.name === 'Search') {
             iconName = focused ? 'ios-search' : 'ios-search-outline';
-          } else if (route.name === 'Profile') {
-            iconName = focused ? 'ios-person' : 'ios-person-outline';
+          } else if (route.name === 'settings') {
+            iconName = focused ? 'ios-settings' : 'ios-settings-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -36,7 +36,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Favorites" component={FavoritesScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="settings" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

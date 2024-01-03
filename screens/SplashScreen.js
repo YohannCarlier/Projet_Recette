@@ -6,6 +6,7 @@ const SplashScreen = ({ navigation }) => { // Ajoutez navigation aux props
   return (
     <View style={styles.container}>
       <Image source={require('../assets/splash-image.png')} style={styles.backgroundImage} />
+      <Image source={require('../assets/chapeau.png')} style={styles.logoImage} />
       <View style={styles.logoContainer}>
       <View style={styles.logoTextContainer}>
       <Text style={styles.orangeText}>Chef</Text>
@@ -50,6 +51,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+    
+    logoImage: {
+      width: '25vw',  // 20% de la largeur de la fenêtre d'affichage
+      height: '25vh', // 20% de la hauteur de la fenêtre d'affichage
+   },
+   
+    
     logoContainer: {
       alignItems: 'center',
     },

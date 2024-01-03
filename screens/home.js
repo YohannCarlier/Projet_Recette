@@ -1,14 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, StatusBar, Alert  } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { getAuth } from 'firebase/auth';
+import { doc, setDoc, getFirestore, deleteDoc  } from 'firebase/firestore';
 
 const RecipeListScreen = ({ navigation }) => {
   const [recipes, setRecipes] = useState([]);
+  const [favorites, setFavorites] = useState({});
+  const auth = getAuth();
+  const firestore = getFirestore();
 
   useEffect(() => {
     fetchRecipes();
   }, []);
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      fetchFavorites();
+    } else {
+      // Si l'utilisateur n'est pas connecté, réinitialiser l'état des favoris
+      setFavorites({});
+    }
+  }, [auth.currentUser]);
+
+
+  const fetchFavorites = async () => {
+    if (auth.currentUser) {
+      const q = query(collection(firestore, `users/${auth.currentUser.uid}/favorites`));
+      const querySnapshot = await getDocs(q);
+      const userFavorites = {};
+      querySnapshot.forEach((doc) => {
+        userFavorites[doc.id] = doc.data();
+      });
+      setFavorites(userFavorites);
+    }
+  };
 
   const fetchRecipes = async () => {
     try {
@@ -26,25 +53,60 @@ const RecipeListScreen = ({ navigation }) => {
     </View>
   );
 
-  const renderRecipe = ({ item }) => (
 
 
-    <View style={styles.card}>
-    <TouchableOpacity onPress={() => {
-      //console.log('Recipe ID: ', item.idMeal);
-      navigation.navigate('RecipeDetail', { recipeId: item.idMeal });
-    }}>
-      <Image source={{ uri: item.strMealThumb }} style={styles.image} />
-      <Text style={styles.title}>{item.strMeal}</Text>
-    </TouchableOpacity>
-    <TouchableOpacity 
-      style={styles.favoriteIcon}
-      onPress={() => {/* Ajoutez ici la logique pour gérer l'ajout aux favoris */}}
-    >
-      <Icon name="favorite-border" size={24} color="#FFF" />
-    </TouchableOpacity>
-  </View>
-);
+  const addToFavorites = async (recipe) => {
+    if (auth.currentUser) {
+      const favDocRef = doc(firestore, `users/${auth.currentUser.uid}/favorites`, recipe.idMeal);
+      if (favorites[recipe.idMeal]) {
+        try {
+          await deleteDoc(favDocRef);
+          setFavorites((currentFavorites) => {
+            const updatedFavorites = { ...currentFavorites };
+            delete updatedFavorites[recipe.idMeal];
+            return updatedFavorites;
+          });
+          alert('Recette retirée des favoris !');
+        } catch (error) {
+          console.error('Erreur lors de la suppression des favoris:', error);
+        }
+      } else {
+        try {
+          await setDoc(favDocRef, recipe);
+          setFavorites((currentFavorites) => ({
+            ...currentFavorites,
+            [recipe.idMeal]: recipe
+          }));
+          alert('Recette ajoutée aux favoris !');
+        } catch (error) {
+          console.error('Erreur lors de l\'ajout aux favoris:', error);
+        }
+      }
+    } else {
+      alert('Veuillez vous connecter pour ajouter des favoris.');
+    }
+  };
+
+  const renderRecipe = ({ item }) => {
+    // Déterminez si la recette est en favoris
+    const isFavorite = !!favorites[item.idMeal];
+    return (
+      <View style={styles.card}>
+        <TouchableOpacity onPress={() => {
+          navigation.navigate('RecipeDetail', { recipeId: item.idMeal });
+        }}>
+          <Image source={{ uri: item.strMealThumb }} style={styles.image} />
+          <Text style={styles.title}>{item.strMeal}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.favoriteIcon}
+          onPress={() => addToFavorites(item)}
+        >
+          <Icon name={isFavorite ? "favorite" : "favorite-border"} size={24} color={isFavorite ? "orange" : "#FFF"} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
